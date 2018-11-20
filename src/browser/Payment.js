@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router';
 import { observer, inject } from "mobx-react"
-import s from './Payment.css';
+import s from './Payment.scss';
 
 const Payment = inject("store")
     (observer(class Payment extends Component {

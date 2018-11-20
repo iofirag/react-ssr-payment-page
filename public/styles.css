@@ -1,6 +1,4 @@
 .payment-title {
-    color: red
-}#app {
-    width: 100%
-}
-        
+  color: blue; }
+  .payment-title .test {
+    color: green; }

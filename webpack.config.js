@@ -2,27 +2,29 @@ var path = require('path')
 var webpack = require('webpack')
 var nodeExternals = require('webpack-node-externals')
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
+var FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
 
 const common = {
   rules: [
     { test: /\.(js)$/, use: 'babel-loader' },
     {
-      test: /\.css$/,
+      test: /\.(scss|css)$/,
       use: ExtractTextPlugin.extract({
-        fallback: "style-loader",
-        use: "css-loader"
+        fallback: 'style-loader',
+        use: ['css-loader', 'sass-loader']
       })
     },
     // {
-    //   test: /\.scss$/,
+    //   test: /\.css$/,
     //   use: ExtractTextPlugin.extract({
-    //     fallback: 'style-loader',
-    //     use: ['css-loader', 'sass-loader']
+    //     fallback: "style-loader",
+    //     use: "css-loader"
     //   })
-    // }
+    // },
   ],
   plugins: [
-    new ExtractTextPlugin('styles.css')
+    new ExtractTextPlugin('styles.css'),
+    new FriendlyErrorsWebpackPlugin(),
     // new ExtractTextPlugin({
     //   filename: '[name].css',
     //   allChunks: true
