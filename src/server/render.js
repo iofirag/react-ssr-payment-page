@@ -19,6 +19,7 @@ export default (pathname, store, context) => {
         <html>
             <head>
                 <title>SSR with RR</title>
+                <link rel="stylesheet" href="/styles.css">
                 <script src="/bundle.js" defer></script>
                 <script>window.INITIAL_STATE = ${serialize(store)}</script>     
             </head>
