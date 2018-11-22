@@ -28,7 +28,7 @@
     "babel-preset-react": "^6.24.1",
     "css-loader": "^1.0.1",
     "extract-loader": "^3.0.0",
-    "extract-text-webpack-plugin": "next",
+    "extract-text-webpack-plugin": "^4.0.0-beta.0",
     "friendly-errors-webpack-plugin": "^1.7.0",
     "isomorphic-style-loader": "^4.0.0",
     "node-sass": "^4.10.0",
