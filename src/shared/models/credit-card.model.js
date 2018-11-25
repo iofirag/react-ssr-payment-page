@@ -1,4 +1,5 @@
 import { types } from 'mobx-state-tree'
+import { getCreditCardType } from '../../browser/cardTypeHelper'
 
 export const GeonameModel = types.model({
     continent: types.optional(types.string, ''),
@@ -24,9 +25,10 @@ export const CreditCardModel = types.model({
     billingAddress: types.optional(types.string, ''),
     countryCode: types.optional(types.string, ''),
     creditCardDetails: types.optional(types.string, ''),
+    creditCardImg: types.optional(types.string, ''),
     month: types.optional(types.string, ''),
     year: types.optional(types.string, ''),
-    cvv: types.optional(types.string, '')
+    cvv: types.optional(types.string, ''),
 })
     .actions(self => ({
         /* Billing Address */
@@ -39,7 +41,14 @@ export const CreditCardModel = types.model({
         isValidCountryCode() { return self.countryCode? true : false },
         /* Credit Card Details */
         getCreditCardDetails() { return self.creditCardDetails },
-        setCreditCardDetails(ccd) { self.creditCardDetails = ccd },
+        setCreditCardDetails(ccd) { 
+            self.creditCardDetails = ccd;
+            // Set image
+            const imgFileName = getCreditCardType(ccd)
+            self.setCreditCardImg(imgFileName)
+        },
+        getCreditCardImg() { return self.creditCardImg },
+        setCreditCardImg(fileName) { self.creditCardImg = fileName },
         isValidCreditCardDetails() { return self.creditCardDetails? true : false },
         /* Month */
         getMonth() { return self.month },

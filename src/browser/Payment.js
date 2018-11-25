@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Redirect } from 'react-router';
 import { observer, inject } from "mobx-react"
 import s from './Payment.scss';
+// import * as cards from './cardTypeHelper'
 
 const Payment = inject("store")
     (observer(class Payment extends Component {
@@ -10,7 +11,7 @@ const Payment = inject("store")
         super(props)
 
         this.state = {
-            ctr: 0,
+            creditCard: {...this.props.store.getCreditCard()},
             navigate: false
         }
     }
@@ -28,7 +29,7 @@ const Payment = inject("store")
             && v.isValidCvv) {
             this.setState({ navigate: true })
         } else {
-            this.setState({validation: v, ctr: this.state.ctr++ })
+            this.setState({validation: v/* , ctr: this.state.ctr++ */ })
         }
     }
 
@@ -36,20 +37,24 @@ const Payment = inject("store")
     onChangeHandler(e) {
         switch (e.target.name) {
             case 'billing_address':
-                this.props.store.creditCard.setBillingAddress(e.target.value);                
+                this.props.store.creditCard.setBillingAddress(e.target.value);      
+                // this.setState({ creditCard: { billingAddress: e.target.value }})
                 break;
             case 'country':
                 this.props.store.creditCard.setCountryCode(e.target.value);
                 break;
             case 'credit_card_details':
                 this.props.store.creditCard.setCreditCardDetails(e.target.value);
-                break;
-            case 'month':
-                const paddMonth = e.target.value.padStart(2, '0');
-                this.props.store.creditCard.setMonth(paddMonth);
+                // const img = cards.getCreditCardType(e.target.value)
                 break;
             case 'year':
+                e.target.value = Math.max(0, parseInt(e.target.value)).toString().slice(0, 4)
                 this.props.store.creditCard.setYear(e.target.value);
+                break;
+            case 'month':
+                e.target.value = Math.max(0, parseInt(e.target.value)).toString().slice(0, 2)
+                const paddMonth = e.target.value.padStart(2, '0');
+                this.props.store.creditCard.setMonth(paddMonth);
                 break;
             case 'cvv':
                 this.props.store.creditCard.setCvv(e.target.value);
@@ -58,12 +63,12 @@ const Payment = inject("store")
             default:
                 break;
         }
-        this.forceUpdate()
+        this.setState(this.state)
     }
 
-    forceUpdate() {
-        this.setState({ ctr: this.state.ctr++ })
-    }
+    // forceUpdate() {
+    //     this.setState({ ctr: this.state.ctr++ })
+    // }
     render() {
         const { navigate, validation } = this.state;
         const creditCard = this.props.store.getCreditCard();
@@ -97,9 +102,10 @@ const Payment = inject("store")
                     <br />
 
                     <label>Credit Card Details:</label>
-                    <input type="text" name="credit_card_details"
+                    <input type="number" name="credit_card_details"
                         value={creditCard.getCreditCardDetails()} 
                         onChange={this.onChangeHandler.bind(this)} />
+                    <img src={creditCard.getCreditCardImg()+'.png'} />
                     {validation && !validation.isValidCreditCardDetails ? <div style={{ color: 'red' }}>error</div> : ''}
                     <br />
 
@@ -108,7 +114,8 @@ const Payment = inject("store")
                         value={creditCard.getYear()} 
                         onChange={this.onChangeHandler.bind(this)}
                         min={new Date().getFullYear()} 
-                        max={new Date().getFullYear() + 8} />
+                        max={new Date().getFullYear() + 8} 
+                        maxLength= {4} />
                     {validation && !validation.isValidYear ? <div style={{ color: 'red' }}>error</div> : ''}
                     <br />
 
@@ -117,7 +124,8 @@ const Payment = inject("store")
                         value={creditCard.getMonth()}
                         onChange={this.onChangeHandler.bind(this)}
                         min={1}
-                        max={12} />
+                        max={12}
+                        maxLength={2} />
                     {validation && !validation.isValidMonth ? <div style={{ color: 'red' }}>error</div> : ''}
                     <br />
 

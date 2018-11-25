@@ -1,4 +1,4 @@
-function getCreditCardType(cardNumber) {
+export const getCreditCardType = (cardNumber) => {
     var _result = "unknown";
 
     if (/^5[1-5]/.test(cardNumber)) { //Mastercard
