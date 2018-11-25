@@ -16,7 +16,6 @@ const common = {
     },
   ],
   plugins: [
-    new ExtractTextPlugin('styles.css'),
     new FriendlyErrorsWebpackPlugin(),
   ]
 }
@@ -34,9 +33,10 @@ var browserConfig = {
     ])
   },
   plugins: common.plugins.concat([
-    new webpack.DefinePlugin({
-      __isBrowser__: "true"
-    }),
+    new ExtractTextPlugin('styles.css'),
+    // new webpack.DefinePlugin({
+    //   __isBrowser__: "true"
+    // }),
   ])
 }
 
@@ -55,9 +55,10 @@ var serverConfig = {
     ])
   },
   plugins: common.plugins.concat([
-    new webpack.DefinePlugin({
-      __isBrowser__: "false"
-    }),
+    new ExtractTextPlugin('./public/serverStyles-not-used.css'),
+    // new webpack.DefinePlugin({
+    //   __isBrowser__: "false"
+    // }),
   ])
 }
 
