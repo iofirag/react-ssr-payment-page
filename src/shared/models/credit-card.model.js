@@ -25,11 +25,15 @@ export const CreditCardModel = types.model({
     billingAddress: types.optional(types.string, ''),
     countryCode: types.optional(types.string, ''),
     creditCardDetails: types.optional(types.string, ''),
-    creditCardImg: types.optional(types.string, ''),
     month: types.optional(types.string, ''),
     year: types.optional(types.string, ''),
     cvv: types.optional(types.string, ''),
 })
+    .views(self => ({
+        get getCreditCardImg () {
+            return getCreditCardType(self.creditCardDetails)
+        }
+    }))
     .actions(self => ({
         /* Billing Address */
         getBillingAddress() { return self.billingAddress },
@@ -41,14 +45,7 @@ export const CreditCardModel = types.model({
         isValidCountryCode() { return self.countryCode? true : false },
         /* Credit Card Details */
         getCreditCardDetails() { return self.creditCardDetails },
-        setCreditCardDetails(ccd) { 
-            self.creditCardDetails = ccd;
-            // Set image
-            const imgFileName = getCreditCardType(ccd)
-            self.setCreditCardImg(imgFileName)
-        },
-        getCreditCardImg() { return self.creditCardImg },
-        setCreditCardImg(fileName) { self.creditCardImg = fileName },
+        setCreditCardDetails(ccd) { self.creditCardDetails = ccd;},
         isValidCreditCardDetails() { return self.creditCardDetails? true : false },
         /* Month */
         getMonth() { return self.month },

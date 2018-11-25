@@ -14,21 +14,10 @@ const common = {
         use: ['css-loader', 'sass-loader']
       })
     },
-    // {
-    //   test: /\.css$/,
-    //   use: ExtractTextPlugin.extract({
-    //     fallback: "style-loader",
-    //     use: "css-loader"
-    //   })
-    // },
   ],
   plugins: [
     new ExtractTextPlugin('styles.css'),
     new FriendlyErrorsWebpackPlugin(),
-    // new ExtractTextPlugin({
-    //   filename: '[name].css',
-    //   allChunks: true
-    // })
   ]
 }
 
@@ -41,7 +30,7 @@ var browserConfig = {
   },
   module: {
     rules: common.rules.concat([
-
+      // Can add more here
     ])
   },
   plugins: common.plugins.concat([
@@ -62,7 +51,7 @@ var serverConfig = {
   },
   module: {
     rules: common.rules.concat([
-
+      // Can add more here
     ])
   },
   plugins: common.plugins.concat([
@@ -71,49 +60,5 @@ var serverConfig = {
     }),
   ])
 }
-const cssConfig = {
-//   entry: './src/*',
-//   output: {
-//     // This is necessary for webpack to compile
-//     // But we never use style-bundle.js
-//     path: path.join(__dirname, 'public'),
-//     publicPath: '/',
-//     filename: 'style-bundle.js'
-//   },
-//   module: {
-//     rules: [
-//       // { test: /\.scss$/, use: ExtractTextPlugin.extract({ fallback: 'style-loader', use: ['css-loader'] }) },
-//       {
-//         test: /\.scss$/,
-//         use: [
-//           {
-//             loader: 'file-loader',
-//             options: {
-//               name: 'bundle.css'
-//             }
-//           },
-//           'extract-loader',
-//           'css-loader',
-//           'postcss-loader',
-//           {
-//             loader: 'sass-loader',
-//             options: {
-//               includePaths: ['./node_modules']
-//             }
-//           }
-//         ]
-//       }, 
-//     // {
-// //       test: /\.(png|jpg|gif|svg)$/,
-// //       loader: 'file-loader',
-// //       options: {
-// //         name: '[name].[ext]',
-// //         publicPath: '/',
-// //         outputPath: 'public/',
-// //         objectAssign: 'Object.assign'
-// //       }
-//     ]
-//   }
-}
 
-module.exports = [browserConfig, serverConfig, /* cssConfig */]
+module.exports = [browserConfig, serverConfig]

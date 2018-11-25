@@ -105,7 +105,7 @@ const Payment = inject("store")
                     <input type="number" name="credit_card_details"
                         value={creditCard.getCreditCardDetails()} 
                         onChange={this.onChangeHandler.bind(this)} />
-                    <img src={creditCard.getCreditCardImg()+'.png'} />
+                    <img src={creditCard.getCreditCardImg+'.png'} />
                     {validation && !validation.isValidCreditCardDetails ? <div style={{ color: 'red' }}>error</div> : ''}
                     <br />
 
