@@ -36,4 +36,7 @@ app.get('/*', (req, res, next) => {
   res.redirect('/');
 })
 
-app.listen(PORT, () => console.log(`Server is listening on port: ${PORT}`));
+app.listen(PORT, () => console.log(`🌎  Server is listening on port: ${PORT}`));
+// app.listen(PORT, () => {
+//   console.info('==> Listening on port %s. Open up http://localhost:%s/ in your browser.', PORT, PORT);
+// });

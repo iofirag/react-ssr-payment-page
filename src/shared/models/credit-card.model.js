@@ -45,8 +45,10 @@ export const CreditCardModel = types.model({
         isValidCountryCode() { return self.countryCode? true : false },
         /* Credit Card Details */
         getCreditCardDetails() { return self.creditCardDetails },
-        setCreditCardDetails(ccd) { self.creditCardDetails = ccd;},
-        isValidCreditCardDetails() { return self.creditCardDetails? true : false },
+        setCreditCardDetails(ccd) { 
+            if (ccd.length <= 16) self.creditCardDetails = ccd;
+        },
+        isValidCreditCardDetails() { return self.creditCardDetails.length === 16 },
         /* Month */
         getMonth() { return self.month },
         setMonth(m) { self.month = m },
@@ -65,13 +67,17 @@ export const CreditCardModel = types.model({
         setYear(y) { self.year = y },
         isValidYear() {
             const d = new Date();
-            if (self.year && parseInt(self.year) <= d.getFullYear() + 8) return true;
+            if (self.year 
+                && parseInt(self.year) >= d.getFullYear() // from
+                && parseInt(self.year) <= d.getFullYear() + 8) return true; // to
             else return false;
         },
         /* CVV */
         getCvv() { return self.cvv },
-        setCvv(c) { self.cvv = c },
-        isValidCvv() { return self.cvv.length === 3 ? true : false },
+        setCvv(c) { 
+            if (c.length <= 3) self.cvv = c
+        },
+        isValidCvv() { return self.cvv.length === 3 },
         /* All */
         formValidation() {
             return {

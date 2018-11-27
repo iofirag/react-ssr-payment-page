@@ -1,18 +1,103 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router';
+import classNames from 'classnames';
 import { observer, inject } from "mobx-react"
-import s from './Payment.scss';
-// import * as cards from './cardTypeHelper'
+import './Payment.scss';
+import { withStyles } from '@material-ui/core/styles';
+import InputLabel from '@material-ui/core/InputLabel';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+import TextField from '@material-ui/core/TextField';
+import MenuItem from '@material-ui/core/MenuItem';
+import Button from '@material-ui/core/Button';
+// import Visibility from '@material-ui/icons/Visibility';
+// import VisibilityOff from '@material-ui/icons/VisibilityOff';
+
+const styles = theme => ({
+    paymentForm: {
+        display: 'flex',
+        flexWrap: 'wrap',
+        minWidth: 120,
+        maxWidth: 435,
+    },
+    
+    billingAddressField: {
+        margin: theme.spacing.unit,
+        minWidth: 250,
+    },
+    countryField: {
+        margin: theme.spacing.unit,
+        width: 150,
+    },
+
+    creditcardField: {
+        margin: theme.spacing.unit,
+        width: 250,
+    },
+    creditcardImg: {
+        margin: theme.spacing.unit,
+        width: 150,
+    },
+
+    yearField: {
+        margin: theme.spacing.unit,
+        width: 100,
+    },
+    monthField: {
+        margin: theme.spacing.unit,
+        width: 100,
+    },
+    cvvField: {
+        margin: theme.spacing.unit,
+        width: 100,
+    },
+
+    button: {
+        margin: theme.spacing.unit,
+    },
+    // margin: {
+    //     margin: theme.spacing.unit,
+    // },
+    // withoutLabel: {
+    //     marginTop: theme.spacing.unit * 3,
+    // },
+    // textField: {
+    //     flexBasis: 200,
+    // },
+    // selectEmpty: {
+    //     marginTop: theme.spacing.unit * 2,
+    // },
+
+    cardImages: {
+        width: '48px',
+        height: '34px',
+
+        amex: {
+            background: 'transparent url(../../creditcards-sprite.png) 0px -8px no-repeat'
+        },
+        mastercard: {
+            background: 'transparent url(../../creditcards-sprite.png) -48px -8px no-repeat'
+        },
+        visa: {
+            background: 'transparent url(../../creditcards-sprite.png) -96px -11px no-repeat'
+        },
+        unknown: {
+
+        }
+    },
+});
 
 const Payment = inject("store")
     (observer(class Payment extends Component {
-    
+        
         constructor(props) {
         super(props)
 
         this.state = {
             creditCard: {...this.props.store.getCreditCard()},
-            navigate: false
+            navigate: false,
+            submitted: false
         }
     }
 
@@ -29,7 +114,7 @@ const Payment = inject("store")
             && v.isValidCvv) {
             this.setState({ navigate: true })
         } else {
-            this.setState({validation: v/* , ctr: this.state.ctr++ */ })
+            this.setState({validation: v, submitted: true})
         }
     }
 
@@ -66,81 +151,155 @@ const Payment = inject("store")
         this.setState(this.state)
     }
 
-    // forceUpdate() {
-    //     this.setState({ ctr: this.state.ctr++ })
-    // }
+    imageClassName() {
+        switch (this.props.store.getCreditCard().getCreditCardImg) {
+            case 'mastercard':
+                return 'mastercard-img'       
+            case 'visa':
+                return 'visa-img'
+            case 'amex':
+                return 'amex-img'
+        
+            default:
+                return 'unknown-img'
+        }
+    }
+    isErrorClass(cond) {
+        !!cond && 'error'
+    }
     render() {
-        const { navigate, validation } = this.state;
+        const { navigate, validation, submitted } = this.state;
         const creditCard = this.props.store.getCreditCard();
         const geonames = this.props.store.getGeonames();
+        const { classes } = this.props;
         
         if (navigate) {
             return <Redirect to="/thanks" push={true} />
         }
 
         return (
-            <ul>
+            <div className="payment">
                 <h1 className="payment-title">Secure Payment Page</h1>
-                <br />
-                <form onSubmit={this.onSubmit.bind(this)}>
-                    <label>Billing Address:</label>
-                    <input type="text" name="billing_address" 
-                        value={creditCard.getBillingAddress()} 
-                        onChange={this.onChangeHandler.bind(this)} />
-                    {validation && !validation.isValidBillingAddress? <div style={{color:'red'}}>error</div> : '' }
-                    <br />
-                    
-                    <label>Country:</label>
-                    <select name='country'
-                        value={creditCard.getCountryCode()}
-                        onChange={this.onChangeHandler.bind(this)}>
-                        {geonames && geonames.map( obj => (
-                            <option key={obj.countryCode} value={obj.countryCode}>{obj.countryName}</option>
-                        ))}
-                    </select>
-                    {validation && !validation.isValidCountryCode ? <div style={{ color: 'red' }}>error</div> : ''}
-                    <br />
 
-                    <label>Credit Card Details:</label>
-                    <input type="number" name="credit_card_details"
-                        value={creditCard.getCreditCardDetails()} 
-                        onChange={this.onChangeHandler.bind(this)} />
-                    <img src={creditCard.getCreditCardImg+'.png'} />
-                    {validation && !validation.isValidCreditCardDetails ? <div style={{ color: 'red' }}>error</div> : ''}
-                    <br />
-
-                    <label>Year:</label>
-                    <input type="number" name="year"
-                        value={creditCard.getYear()} 
+                <form className={classes.paymentForm} onSubmit={this.onSubmit.bind(this)}  autoComplete="off">
+                    <TextField
+                        required
+                        error={submitted && !validation.isValidBillingAddress}
+                        id="billing_address"
+                        label="Billing Address"
+                        className={classes.billingAddressField}
+                        value={creditCard.getBillingAddress()}
                         onChange={this.onChangeHandler.bind(this)}
-                        min={new Date().getFullYear()} 
-                        max={new Date().getFullYear() + 8} 
-                        maxLength= {4} />
-                    {validation && !validation.isValidYear ? <div style={{ color: 'red' }}>error</div> : ''}
-                    <br />
+                        margin="normal"
+                        inputProps={{
+                            name: 'billing_address',
+                            id: 'billing_address',
+                        }}
+                    />
 
-                    <label>Month:</label>
-                    <input disabled={!creditCard.getYear()} type="number" name="month"
+                    <FormControl required error={submitted && !validation.isValidCountryCode} className={classes.countryField}>
+                        <InputLabel htmlFor="country">Country</InputLabel>
+                        <Select
+                            value={creditCard.getCountryCode()}
+                            onChange={this.onChangeHandler.bind(this)}
+                            inputProps={{
+                                name: 'country',
+                                id: 'country',
+                            }}
+                        >
+                            <MenuItem value="">
+                                <em>None</em>
+                            </MenuItem>
+                            {geonames && geonames.map(obj => (
+                                <MenuItem key={obj.countryCode} value={obj.countryCode}>{obj.countryName}</MenuItem>
+                            ))}
+                        </Select>
+                        {/* {
+                            submitted && !validation.isValidCountryCode ?
+                                <FormHelperText>Error</FormHelperText> : ''
+                        } */}
+                    </FormControl>
+                    
+                    <TextField
+                        required
+                        error={submitted && !validation.isValidCreditCardDetails}
+                        id="credit_card_details"
+                        label="Credit Card Details"
+                        className={classes.creditcardField}
+                        value={creditCard.getCreditCardDetails()}
+                        onChange={this.onChangeHandler.bind(this)}
+                        margin="normal"
+                        inputProps={{
+                            name: 'credit_card_details',
+                            id: 'credit_card_details',
+                            type: 'number',
+                        }}
+                    />
+                    <div className={[classes.creditcardImg, this.imageClassName()].join(' ')} />
+                    
+                    <TextField
+                        required
+                        error={submitted && !validation.isValidMonth}
+                        disabled={!creditCard.getYear()}
+                        id="month"
+                        label="Month"
+                        className={classes.yearField}
                         value={creditCard.getMonth()}
                         onChange={this.onChangeHandler.bind(this)}
-                        min={1}
-                        max={12}
-                        maxLength={2} />
-                    {validation && !validation.isValidMonth ? <div style={{ color: 'red' }}>error</div> : ''}
-                    <br />
-
-                    <label>CVV:</label>
-                    <input type="text" name="cvv"
+                        margin="normal"
+                        inputProps={{
+                            name: 'month',
+                            id: 'month',
+                            type: 'number',
+                        }}
+                        // min={1}
+                        // max={12}
+                        maxLength={2}
+                    />
+                    
+                    <TextField
+                        required
+                        error={submitted && !validation.isValidYear}
+                        id="year"
+                        label="Year"
+                        className={classes.yearField}
+                        value={creditCard.getYear()}
+                        onChange={this.onChangeHandler.bind(this)}
+                        margin="normal"
+                        inputProps={{
+                            name: 'year',
+                            id: 'year',
+                            type: 'number',
+                        }}
+                        // min={new Date().getFullYear()}
+                        // max={ new Date().getFullYear() + 8 }
+                        maxLength={4}
+                    />
+                    
+                    <TextField
+                        required
+                        error={submitted && !validation.isValidCvv}
+                        id="cvv"
+                        label="CVV"
+                        className={classes.cvvField}
                         value={creditCard.getCvv()}
                         onChange={this.onChangeHandler.bind(this)}
-                        maxLength={3} />
-                    {validation && !validation.isValidCvv ? <div style={{ color: 'red' }}>error</div> : ''}
-                    <br />
+                        margin="normal"
+                        inputProps={{
+                            name: 'cvv',
+                            id: 'cvv',
+                            type: 'number',
+                        }}
+                        // maxLength={3}
+                    />
 
-                    <input type="submit" value="Submit Payment"/>
+                    <Button type="submit" variant="contained" color="primary" className={classes.button}>
+                        Submit Payment
+                    </Button>
                 </form>
-            </ul>
+                
+            </div>
         )
     }
 }))
-export default Payment;
+export default withStyles(styles)(Payment);

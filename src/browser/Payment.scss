@@ -1,8 +1,28 @@
+.payment {
+    .payment-title {
+        color: blue;
+    }
+    .payment-form {
+        // color:green;
+        .validation-error {
+            color: red;
+        }
+        .card-image {
+            width: 48px;
+            height: 34px;
+        }
+        .amex-img {
+            background: transparent url(../../creditcards-sprite.png) 0px -8px no-repeat;
+        }
+        .mastercard-img {
+            background: transparent url(../../creditcards-sprite.png) -48px -8px no-repeat;
+        }
+        .visa-img {
+            background: transparent url(../../creditcards-sprite.png) -96px -11px no-repeat;
+        }
+        .unknown-img {
 
-.payment-title {
-    color: blue;
-    
-    .test {
-        color:green;
+        }
+        
     }
 }

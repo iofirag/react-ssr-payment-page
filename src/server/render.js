@@ -19,9 +19,10 @@ export default (pathname, store, context) => {
         <html>
             <head>
                 <title>SSR with RR</title>
+                <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no"/>
                 <link rel="stylesheet" href="/styles.css">
                 <script src="/bundle.js" defer></script>
-                <script>window.INITIAL_STATE = ${serialize(store)}</script>     
+                <script>window.INITIAL_STATE = ${serialize(store)}</script>
             </head>
             <body>
                 <div id="app">${markup}</div>

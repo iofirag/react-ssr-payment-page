@@ -1,4 +1,18 @@
-.payment-title {
+.payment .payment-title {
   color: blue; }
-  .payment-title .test {
-    color: green; }
+
+.payment .payment-form .validation-error {
+  color: red; }
+
+.payment .payment-form .card-image {
+  width: 48px;
+  height: 34px; }
+
+.payment .payment-form .amex-img {
+  background: transparent url(../../creditcards-sprite.png) 0px -8px no-repeat; }
+
+.payment .payment-form .mastercard-img {
+  background: transparent url(../../creditcards-sprite.png) -48px -8px no-repeat; }
+
+.payment .payment-form .visa-img {
+  background: transparent url(../../creditcards-sprite.png) -96px -11px no-repeat; }
