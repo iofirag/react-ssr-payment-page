@@ -1,18 +1,38 @@
 .payment .payment-title {
   color: blue; }
 
-.payment .payment-form .validation-error {
-  color: red; }
-
-.payment .payment-form .card-image {
-  width: 48px;
-  height: 34px; }
-
-.payment .payment-form .amex-img {
-  background: transparent url(../../creditcards-sprite.png) 0px -8px no-repeat; }
-
-.payment .payment-form .mastercard-img {
-  background: transparent url(../../creditcards-sprite.png) -48px -8px no-repeat; }
-
-.payment .payment-form .visa-img {
-  background: transparent url(../../creditcards-sprite.png) -96px -11px no-repeat; }
+.payment .payment-form {
+  display: flex;
+  flex-wrap: wrap;
+  min-width: 120px;
+  max-width: 435px; }
+  .payment .payment-form .billing-address-field {
+    margin: 8px;
+    min-width: 250px; }
+  .payment .payment-form .country-field {
+    margin: 8px;
+    width: 150px; }
+  .payment .payment-form .creditcard-details-field {
+    margin: 8px;
+    width: 250px; }
+  .payment .payment-form .creditcard-img {
+    margin: 8px;
+    width: 150px;
+    height: 34px; }
+    .payment .payment-form .creditcard-img.amex-img {
+      background: transparent url(../../creditcards-sprite.png) 0px -8px no-repeat; }
+    .payment .payment-form .creditcard-img.mastercard-img {
+      background: transparent url(../../creditcards-sprite.png) -48px -8px no-repeat; }
+    .payment .payment-form .creditcard-img.visa-img {
+      background: transparent url(../../creditcards-sprite.png) -96px -11px no-repeat; }
+  .payment .payment-form .year-field {
+    margin: 8px;
+    width: 100px; }
+  .payment .payment-form .month-field {
+    margin: 8px;
+    width: 100px; }
+  .payment .payment-form .cvv-field {
+    margin: 8px;
+    width: 100px; }
+  .payment .payment-form button.submit {
+    margin: 8px; }

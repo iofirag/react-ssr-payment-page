@@ -15,77 +15,51 @@ import Button from '@material-ui/core/Button';
 // import VisibilityOff from '@material-ui/icons/VisibilityOff';
 
 const styles = theme => ({
-    paymentForm: {
-        display: 'flex',
-        flexWrap: 'wrap',
-        minWidth: 120,
-        maxWidth: 435,
-    },
+    // paymentForm: {
+    //     display: 'flex',
+    //     flexWrap: 'wrap',
+    //     minWidth: 120,
+    //     maxWidth: 435,
+    // },
     
-    billingAddressField: {
-        margin: theme.spacing.unit,
-        minWidth: 250,
-    },
-    countryField: {
-        margin: theme.spacing.unit,
-        width: 150,
-    },
+    // billingAddressField: {
+    //     margin: theme.spacing.unit,
+    //     minWidth: 250,
+    // },
+    // countryField: {
+    //     margin: theme.spacing.unit,
+    //     width: 150,
+    // },
 
-    creditcardField: {
-        margin: theme.spacing.unit,
-        width: 250,
-    },
-    creditcardImg: {
-        margin: theme.spacing.unit,
-        width: 150,
-    },
+    // creditcardField: {
+    //     margin: theme.spacing.unit,
+    //     width: 250,
+    // },
+    // creditcardImg: {
+    //     margin: theme.spacing.unit,
+    //     // width: 150,
+    //     width: 48,
+    //     height: 34,
+    // },
 
-    yearField: {
-        margin: theme.spacing.unit,
-        width: 100,
-    },
-    monthField: {
-        margin: theme.spacing.unit,
-        width: 100,
-    },
-    cvvField: {
-        margin: theme.spacing.unit,
-        width: 100,
-    },
+    
 
-    button: {
-        margin: theme.spacing.unit,
-    },
-    // margin: {
+    // yearField: {
+    //     margin: theme.spacing.unit,
+    //     width: 100,
+    // },
+    // monthField: {
+    //     margin: theme.spacing.unit,
+    //     width: 100,
+    // },
+    // cvvField: {
+    //     margin: theme.spacing.unit,
+    //     width: 100,
+    // },
+
+    // button: {
     //     margin: theme.spacing.unit,
     // },
-    // withoutLabel: {
-    //     marginTop: theme.spacing.unit * 3,
-    // },
-    // textField: {
-    //     flexBasis: 200,
-    // },
-    // selectEmpty: {
-    //     marginTop: theme.spacing.unit * 2,
-    // },
-
-    cardImages: {
-        width: '48px',
-        height: '34px',
-
-        amex: {
-            background: 'transparent url(../../creditcards-sprite.png) 0px -8px no-repeat'
-        },
-        mastercard: {
-            background: 'transparent url(../../creditcards-sprite.png) -48px -8px no-repeat'
-        },
-        visa: {
-            background: 'transparent url(../../creditcards-sprite.png) -96px -11px no-repeat'
-        },
-        unknown: {
-
-        }
-    },
 });
 
 const Payment = inject("store")
@@ -171,7 +145,6 @@ const Payment = inject("store")
         const { navigate, validation, submitted } = this.state;
         const creditCard = this.props.store.getCreditCard();
         const geonames = this.props.store.getGeonames();
-        const { classes } = this.props;
         
         if (navigate) {
             return <Redirect to="/thanks" push={true} />
@@ -181,13 +154,14 @@ const Payment = inject("store")
             <div className="payment">
                 <h1 className="payment-title">Secure Payment Page</h1>
 
-                <form className={classes.paymentForm} onSubmit={this.onSubmit.bind(this)}  autoComplete="off">
+                <form className='payment-form' onSubmit={this.onSubmit.bind(this)}  autoComplete="off">
+                    
                     <TextField
                         required
                         error={submitted && !validation.isValidBillingAddress}
                         id="billing_address"
                         label="Billing Address"
-                        className={classes.billingAddressField}
+                        className='billing-address-field'
                         value={creditCard.getBillingAddress()}
                         onChange={this.onChangeHandler.bind(this)}
                         margin="normal"
@@ -197,7 +171,7 @@ const Payment = inject("store")
                         }}
                     />
 
-                    <FormControl required error={submitted && !validation.isValidCountryCode} className={classes.countryField}>
+                    <FormControl required error={submitted && !validation.isValidCountryCode} className='country-field'>
                         <InputLabel htmlFor="country">Country</InputLabel>
                         <Select
                             value={creditCard.getCountryCode()}
@@ -225,7 +199,7 @@ const Payment = inject("store")
                         error={submitted && !validation.isValidCreditCardDetails}
                         id="credit_card_details"
                         label="Credit Card Details"
-                        className={classes.creditcardField}
+                        className='creditcard-details-field'
                         value={creditCard.getCreditCardDetails()}
                         onChange={this.onChangeHandler.bind(this)}
                         margin="normal"
@@ -235,7 +209,7 @@ const Payment = inject("store")
                             type: 'number',
                         }}
                     />
-                    <div className={[classes.creditcardImg, this.imageClassName()].join(' ')} />
+                    <div className={classNames('creditcard-img', this.imageClassName())} />
                     
                     <TextField
                         required
@@ -243,7 +217,7 @@ const Payment = inject("store")
                         disabled={!creditCard.getYear()}
                         id="month"
                         label="Month"
-                        className={classes.yearField}
+                        className='month-field'
                         value={creditCard.getMonth()}
                         onChange={this.onChangeHandler.bind(this)}
                         margin="normal"
@@ -262,7 +236,7 @@ const Payment = inject("store")
                         error={submitted && !validation.isValidYear}
                         id="year"
                         label="Year"
-                        className={classes.yearField}
+                        className='year-field'
                         value={creditCard.getYear()}
                         onChange={this.onChangeHandler.bind(this)}
                         margin="normal"
@@ -281,7 +255,7 @@ const Payment = inject("store")
                         error={submitted && !validation.isValidCvv}
                         id="cvv"
                         label="CVV"
-                        className={classes.cvvField}
+                        className='cvv-field'
                         value={creditCard.getCvv()}
                         onChange={this.onChangeHandler.bind(this)}
                         margin="normal"
@@ -293,7 +267,7 @@ const Payment = inject("store")
                         // maxLength={3}
                     />
 
-                    <Button type="submit" variant="contained" color="primary" className={classes.button}>
+                    <Button type="submit" variant="contained" color="primary" className='submit'>
                         Submit Payment
                     </Button>
                 </form>
