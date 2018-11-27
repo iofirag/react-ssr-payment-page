@@ -3,7 +3,6 @@ import { Redirect } from 'react-router';
 import classNames from 'classnames';
 import { observer, inject } from "mobx-react"
 import './Payment.scss';
-import { withStyles } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
@@ -13,54 +12,6 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Button from '@material-ui/core/Button';
 // import Visibility from '@material-ui/icons/Visibility';
 // import VisibilityOff from '@material-ui/icons/VisibilityOff';
-
-const styles = theme => ({
-    // paymentForm: {
-    //     display: 'flex',
-    //     flexWrap: 'wrap',
-    //     minWidth: 120,
-    //     maxWidth: 435,
-    // },
-    
-    // billingAddressField: {
-    //     margin: theme.spacing.unit,
-    //     minWidth: 250,
-    // },
-    // countryField: {
-    //     margin: theme.spacing.unit,
-    //     width: 150,
-    // },
-
-    // creditcardField: {
-    //     margin: theme.spacing.unit,
-    //     width: 250,
-    // },
-    // creditcardImg: {
-    //     margin: theme.spacing.unit,
-    //     // width: 150,
-    //     width: 48,
-    //     height: 34,
-    // },
-
-    
-
-    // yearField: {
-    //     margin: theme.spacing.unit,
-    //     width: 100,
-    // },
-    // monthField: {
-    //     margin: theme.spacing.unit,
-    //     width: 100,
-    // },
-    // cvvField: {
-    //     margin: theme.spacing.unit,
-    //     width: 100,
-    // },
-
-    // button: {
-    //     margin: theme.spacing.unit,
-    // },
-});
 
 const Payment = inject("store")
     (observer(class Payment extends Component {
@@ -276,4 +227,4 @@ const Payment = inject("store")
         )
     }
 }))
-export default withStyles(styles)(Payment);
+export default Payment;

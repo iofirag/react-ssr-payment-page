@@ -17,7 +17,8 @@
     width: 250px; }
   .payment .payment-form .creditcard-img {
     margin: 8px;
-    width: 150px;
+    margin-top: 21px;
+    width: 48px;
     height: 34px; }
     .payment .payment-form .creditcard-img.amex-img {
       background: transparent url(../../creditcards-sprite.png) 0px -8px no-repeat; }
