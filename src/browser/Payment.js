@@ -157,7 +157,6 @@ const Payment = inject("store")
                         inputProps={{
                             name: 'credit_card_details',
                             id: 'credit_card_details',
-                            type: 'number',
                         }}
                     />
                     <div className={classNames('creditcard-img', this.imageClassName())} />

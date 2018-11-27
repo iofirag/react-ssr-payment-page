@@ -46,9 +46,26 @@ export const CreditCardModel = types.model({
         /* Credit Card Details */
         getCreditCardDetails() { return self.creditCardDetails },
         setCreditCardDetails(ccd) { 
-            if (ccd.length <= 16) self.creditCardDetails = ccd;
+            let cleanNum = ccd.split('-').join(''); // remove hyphens
+            if (cleanNum.length <= 16 && Number(cleanNum)) {
+                if (cleanNum.length > 0) {
+                    cleanNum = cleanNum.match(new RegExp('.{1,4}', 'g')).join('-');
+                }
+                self.creditCardDetails = cleanNum;
+            }
         },
-        isValidCreditCardDetails() { return self.creditCardDetails.length === 16 },
+        isValidCreditCardDetails() { 
+            var ccNum = self.creditCardDetails.split('-').join('');
+            var visaRegEx = /^(?:4[0-9]{12}(?:[0-9]{3})?)$/;
+            var mastercardRegEx = /^(?:5[1-5][0-9]{14})$/;
+            var amexpRegEx = /^(?:3[47][0-9]{13})$/;
+            var discovRegEx = /^(?:6(?:011|5[0-9][0-9])[0-9]{12})$/;
+
+            return visaRegEx.test(ccNum) 
+                || mastercardRegEx.test(ccNum) 
+                || amexpRegEx.test(ccNum)
+                || discovRegEx.test(ccNum)
+        },
         /* Month */
         getMonth() { return self.month },
         setMonth(m) { self.month = m },
