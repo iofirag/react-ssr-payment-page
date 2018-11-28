@@ -1,5 +1,4 @@
-import React, { Component, Suspense } from 'react';
-import { Redirect } from 'react-router';
+import React, { Component } from 'react';
 import classNames from 'classnames';
 import { observer, inject } from "mobx-react"
 import './Payment.scss';
@@ -10,6 +9,7 @@ import Select from '@material-ui/core/Select';
 import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
 import Button from '@material-ui/core/Button';
+import { GenericSelection } from './ui-components/GenericSelection'
 // import Visibility from '@material-ui/icons/Visibility';
 // import VisibilityOff from '@material-ui/icons/VisibilityOff';
 
@@ -49,23 +49,18 @@ const Payment = inject("store")
         switch (e.target.name) {
             case 'billing_address':
                 this.props.store.creditCard.setBillingAddress(e.target.value);      
-                // this.setState({ creditCard: { billingAddress: e.target.value }})
                 break;
             case 'country':
                 this.props.store.creditCard.setCountryCode(e.target.value);
                 break;
             case 'credit_card_details':
                 this.props.store.creditCard.setCreditCardDetails(e.target.value);
-                // const img = cards.getCreditCardType(e.target.value)
                 break;
             case 'year':
-                e.target.value = Math.max(0, parseInt(e.target.value)).toString().slice(0, 4)
                 this.props.store.creditCard.setYear(e.target.value);
                 break;
             case 'month':
-                e.target.value = Math.max(0, parseInt(e.target.value)).toString().slice(0, 2)
-                const paddMonth = e.target.value.padStart(2, '0');
-                this.props.store.creditCard.setMonth(paddMonth);
+                this.props.store.creditCard.setMonth(e.target.value);
                 break;
             case 'cvv':
                 this.props.store.creditCard.setCvv(e.target.value);
@@ -96,10 +91,36 @@ const Payment = inject("store")
     componentDidMount() {
         
     }
+    generateMonthList() {
+        const list = [];
+        for (let i = 1; i <= 12; i++) {
+            // Create month name
+            const objDate = new Date(`${i}/25/2020`)
+            const locale = "en-us",
+                monthName = objDate.toLocaleString(locale, { month: "long" });
+            const month = {
+                number: String(i),
+                name: monthName
+            }
+            list.push(month)
+        }
+        return list;
+    }
+    generateYearList() {
+        const list = []
+        for (let i = 0; i < 9; i++) {
+            const currYear = new Date().getFullYear()
+            const year = {
+                number: String(currYear + i),
+            }
+            list.push(year)
+        }
+        return list;
+    }
     render() {
         const { navigate, validation, submitted } = this.state;
         const creditCard = this.props.store.getCreditCard();
-        const { geonamesArray } = this.props.store
+        const { geonames } = this.props.store
         
         if (navigate) {
             return <Redirect to="/thanks" push={true} />
@@ -117,39 +138,22 @@ const Payment = inject("store")
                         id="billing_address"
                         label="Billing Address"
                         className='billing-address-field'
-                        value={creditCard.getBillingAddress()}
+                        value={creditCard.billingAddress}
                         onChange={this.onChangeHandler.bind(this)}
                         margin="normal"
-                        inputProps={{
-                            name: 'billing_address',
-                            id: 'billing_address',
-                        }}
+                        inputProps={{ name: 'billing_address' }}
                     />
 
                     <FormControl required error={submitted && !validation.isValidCountryCode} className='country-field'>
                         <InputLabel htmlFor="country">Country</InputLabel>
-                        {/* <Select
-                            value={creditCard.getCountryCode()}
-                            onChange={this.onChangeHandler.bind(this)}
-                            inputProps={{
-                                name: 'country',
-                                id: 'country',
-                            }}
-                        >
-                            <MenuItem value="">
-                                <em>None</em>
-                            </MenuItem>
-                            {/* <Suspense fallback={<div>Loading...</div>}> */}
-                            {/* {
-                                geonamesArray.map(obj => (
-                                    <MenuItem key={obj.countryCode} value={obj.countryCode}>{obj.countryName}</MenuItem>
-                                ))
-                            } */}
-                            {/* </Suspense> */}
-                        {/* </Select>  */}
-                        <CountrySelect 
-                            geonamesArray={geonamesArray}
-                            countryCode={creditCard.getCountryCode()}
+
+                        <GenericSelection 
+                            list={geonames}
+                            listIdField={'countryCode'}
+                            listValField={'countryCode'}
+                            listLabelField={'countryName'}
+                            name={'country'}
+                            value={creditCard.countryCode}
                             onChangeHandler={this.onChangeHandler.bind(this)} />
                         {/* {
                             submitted && !validation.isValidCountryCode ?
@@ -163,54 +167,45 @@ const Payment = inject("store")
                         id="credit_card_details"
                         label="Credit Card Details"
                         className='creditcard-details-field'
-                        value={creditCard.getCreditCardDetails()}
+                        value={creditCard.creditCardDetails}
                         onChange={this.onChangeHandler.bind(this)}
                         margin="normal"
-                        inputProps={{
-                            name: 'credit_card_details',
-                            id: 'credit_card_details',
-                        }}
+                        inputProps={{ name: 'credit_card_details' }}
                     />
                     <div className={classNames('creditcard-img', this.imageClassName())} />
                     
-                    <TextField
-                        required
-                        error={submitted && !validation.isValidMonth}
-                        disabled={!creditCard.getYear()}
-                        id="month"
-                        label="Month"
-                        className='month-field'
-                        value={creditCard.getMonth()}
-                        onChange={this.onChangeHandler.bind(this)}
-                        margin="normal"
-                        inputProps={{
-                            name: 'month',
-                            id: 'month',
-                            type: 'number',
-                        }}
-                        // min={1}
-                        // max={12}
-                        maxLength={2}
-                    />
-                    
-                    <TextField
-                        required
-                        error={submitted && !validation.isValidYear}
-                        id="year"
-                        label="Year"
-                        className='year-field'
-                        value={creditCard.getYear()}
-                        onChange={this.onChangeHandler.bind(this)}
-                        margin="normal"
-                        inputProps={{
-                            name: 'year',
-                            id: 'year',
-                            type: 'number',
-                        }}
-                        // min={new Date().getFullYear()}
-                        // max={ new Date().getFullYear() + 8 }
-                        maxLength={4}
-                    />
+                    <FormControl required error={submitted && !validation.isValidMonth} className='month-field'>
+                        <InputLabel htmlFor="month">Month</InputLabel>
+                        <GenericSelection
+                            list={this.generateMonthList()}
+                            listIdField={'number'}
+                            listValField={'number'}
+                            listLabelField={'name'}
+                            name={'month'}
+                            value={creditCard.month}
+                            onChangeHandler={this.onChangeHandler.bind(this)} />
+
+                        {/* {
+                            submitted && !validation.isValidMonth ?
+                                <FormHelperText>Error</FormHelperText> : ''
+                        } */}
+                    </FormControl>
+
+                    <FormControl required error={submitted && !validation.isValidYear} className='year-field'>
+                        <InputLabel htmlFor="year">Year</InputLabel>
+                        <GenericSelection
+                            list={this.generateYearList()}
+                            listIdField={'number'}
+                            listValField={'number'}
+                            listLabelField={'number'}
+                            name={'year'}
+                            value={creditCard.year}
+                            onChangeHandler={this.onChangeHandler.bind(this)} />
+                        {/* {
+                            submitted && !validation.isValidMonth ?
+                                <FormHelperText>Error</FormHelperText> : ''
+                        } */}
+                    </FormControl>
                     
                     <TextField
                         required
@@ -218,15 +213,13 @@ const Payment = inject("store")
                         id="cvv"
                         label="CVV"
                         className='cvv-field'
-                        value={creditCard.getCvv()}
+                        value={creditCard.cvv}
                         onChange={this.onChangeHandler.bind(this)}
                         margin="normal"
                         inputProps={{
                             name: 'cvv',
-                            id: 'cvv',
                             type: 'number',
                         }}
-                        // maxLength={3}
                     />
 
                     <Button type="submit" variant="contained" color="primary" className='submit'>
@@ -239,26 +232,3 @@ const Payment = inject("store")
     }
 }))
 export default Payment;
-
-const CountrySelect = React.memo(props => {
-    console.log(props.geonamesArray)
-    return (
-        <Select
-            value={props.countryCode}
-            onChange={props.onChangeHandler}
-            inputProps={{
-                name: 'country',
-                id: 'country',
-            }}
-        >
-            <MenuItem value="">
-                <em>None</em>
-            </MenuItem>
-            {
-                props.geonamesArray.map(obj => (
-                    <MenuItem key={obj.countryCode} value={obj.countryCode}>{obj.countryName}</MenuItem>
-                ))
-            }
-        </Select>
-    )
-})

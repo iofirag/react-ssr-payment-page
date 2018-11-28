@@ -1,6 +1,7 @@
 import { types, flow } from 'mobx-state-tree'
 import { getCreditCardType } from '../../browser/cardTypeHelper'
 import { fetchInitialData } from '../api'
+import { MockResponse } from '../api'
 
 export const GeonameModel = types.model({
     continent: types.optional(types.string, ''),
@@ -37,15 +38,12 @@ export const CreditCardModel = types.model({
     }))
     .actions(self => ({
         /* Billing Address */
-        getBillingAddress() { return self.billingAddress },
         setBillingAddress(ba) { self.billingAddress = ba },
-        isValidBillingAddress() { return self.billingAddress? true : false},
+        isValidBillingAddress() { return self.billingAddress.length > 0},
         /* Country Code */
-        getCountryCode() { return self.countryCode },
         setCountryCode(cc) { self.countryCode = cc },
-        isValidCountryCode() { return self.countryCode? true : false },
+        isValidCountryCode() { return self.countryCode.length > 0 },
         /* Credit Card Details */
-        getCreditCardDetails() { return self.creditCardDetails },
         setCreditCardDetails(ccd) { 
             let cleanNum = ccd.split('-').join(''); // remove hyphens
             if (cleanNum.length <= 16 && Number(cleanNum)) {
@@ -68,8 +66,12 @@ export const CreditCardModel = types.model({
                 || discovRegEx.test(ccNum)
         },
         /* Month */
-        getMonth() { return self.month },
-        setMonth(m) { self.month = m },
+        setMonth(m) { 
+            // m = Math.max(0, parseInt(m)).toString().slice(0, 2)
+            // const paddMonth = m.padStart(2, '0');
+            // self.month = paddMonth 
+            self.month = m
+        },
         isValidMonth() {
             const y = parseInt(self.year);
             const m = parseInt(self.month);
@@ -77,12 +79,14 @@ export const CreditCardModel = types.model({
 
             const d = new Date();
             var cardDate = new Date(y, m - 1);
-            var currDate = new Date(d.getFullYear(), d.getMonth());
+            var currDate = new Date(d.getFullYear(), d.month);
             return cardDate >= currDate;
         },
         /* Year */
-        getYear() { return self.year },
-        setYear(y) { self.year = y },
+        setYear(y) { 
+            y = Math.max(0, parseInt(y)).toString().slice(0, 4)
+            self.year = y 
+        },
         isValidYear() {
             const d = new Date();
             if (self.year 
@@ -91,10 +95,7 @@ export const CreditCardModel = types.model({
             else return false;
         },
         /* CVV */
-        getCvv() { return self.cvv },
-        setCvv(c) { 
-            if (c.length <= 3) self.cvv = c
-        },
+        setCvv(c) { if (c.length <= 3) self.cvv = c },
         isValidCvv() { return self.cvv.length === 3 },
         /* All */
         formValidation() {
@@ -115,21 +116,17 @@ export const RootStore = types.model({
     geonames: types.maybe( types.array(GeonameModel), []),
     creditCard: types.maybe(CreditCardModel, {})
 })
-    .views(self => ({
-        get geonamesArray() {
-            return self.geonames.toJSON()
-        }
-    }))
     .actions(self => ({
         fetchGeonames: flow(function*() {
             try {
                 const res = yield fetchInitialData()
-                self.geonames = res.geonames
-            } catch (e) { console.log(e) }
+                const data = yield res.json()
+                self.geonames = data.geonames
+            } catch (e) {
+                console.error('Get mock data', e)
+                self.geonames = MockResponse.geonames
+            }
         }),
-        setGeonames(_geonames) {
-            self.geonames = _geonames
-        },
         getCreditCard() {
             return self.creditCard;
         }

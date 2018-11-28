@@ -1,10 +1,10 @@
-// import fetch from 'isomorphic-fetch'
+import fetch from 'isomorphic-fetch'
 
 export const fetchInitialData = () => {
-    return new Promise(resolve => setTimeout(() => resolve(dataList), 2000));
+    return fetch('http://api.geonames.org/countryInfoJSON?username=dperic');
 }
 
-const dataList = {
+export const mockResponse = {
     geonames: [
         {
             "continent": "EU",
