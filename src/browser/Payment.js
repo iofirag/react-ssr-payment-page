@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Suspense } from 'react';
 import { Redirect } from 'react-router';
 import classNames from 'classnames';
 import { observer, inject } from "mobx-react"
@@ -24,6 +24,7 @@ const Payment = inject("store")
             navigate: false,
             submitted: false
         }
+        this.props.store.fetchGeonames();
     }
 
     onSubmit(e) {
@@ -92,10 +93,13 @@ const Payment = inject("store")
     isErrorClass(cond) {
         !!cond && 'error'
     }
+    componentDidMount() {
+        
+    }
     render() {
         const { navigate, validation, submitted } = this.state;
         const creditCard = this.props.store.getCreditCard();
-        const geonames = this.props.store.getGeonames();
+        const { geonamesArray } = this.props.store
         
         if (navigate) {
             return <Redirect to="/thanks" push={true} />
@@ -124,7 +128,7 @@ const Payment = inject("store")
 
                     <FormControl required error={submitted && !validation.isValidCountryCode} className='country-field'>
                         <InputLabel htmlFor="country">Country</InputLabel>
-                        <Select
+                        {/* <Select
                             value={creditCard.getCountryCode()}
                             onChange={this.onChangeHandler.bind(this)}
                             inputProps={{
@@ -135,10 +139,18 @@ const Payment = inject("store")
                             <MenuItem value="">
                                 <em>None</em>
                             </MenuItem>
-                            {geonames && geonames.map(obj => (
-                                <MenuItem key={obj.countryCode} value={obj.countryCode}>{obj.countryName}</MenuItem>
-                            ))}
-                        </Select>
+                            {/* <Suspense fallback={<div>Loading...</div>}> */}
+                            {/* {
+                                geonamesArray.map(obj => (
+                                    <MenuItem key={obj.countryCode} value={obj.countryCode}>{obj.countryName}</MenuItem>
+                                ))
+                            } */}
+                            {/* </Suspense> */}
+                        {/* </Select>  */}
+                        <CountrySelect 
+                            geonamesArray={geonamesArray}
+                            countryCode={creditCard.getCountryCode()}
+                            onChangeHandler={this.onChangeHandler.bind(this)} />
                         {/* {
                             submitted && !validation.isValidCountryCode ?
                                 <FormHelperText>Error</FormHelperText> : ''
@@ -227,3 +239,26 @@ const Payment = inject("store")
     }
 }))
 export default Payment;
+
+const CountrySelect = React.memo(props => {
+    console.log(props.geonamesArray)
+    return (
+        <Select
+            value={props.countryCode}
+            onChange={props.onChangeHandler}
+            inputProps={{
+                name: 'country',
+                id: 'country',
+            }}
+        >
+            <MenuItem value="">
+                <em>None</em>
+            </MenuItem>
+            {
+                props.geonamesArray.map(obj => (
+                    <MenuItem key={obj.countryCode} value={obj.countryCode}>{obj.countryName}</MenuItem>
+                ))
+            }
+        </Select>
+    )
+})

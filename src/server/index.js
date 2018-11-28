@@ -18,18 +18,18 @@ app.get('/', (req, res, next) => {
 
   const defaultRoute = routes.find(item => item.path === '/')
 
-  defaultRoute.fetchInitialData()
-    .then((_initialDataRes) => {
-      const { geonames } = _initialDataRes;
+  // defaultRoute.fetchInitialData()
+    // .then((_initialDataRes) => {
+      // const { geonames } = _initialDataRes;
       const store = RootStore.create({
-        geonames,
+        geonames: [],
         creditCard: {}
       });
 
       const context = {}
       const content = render(req.path, store, context);
       res.send(content);
-    }).catch(next)
+    // }).catch(next)
 })
 
 app.get('/*', (req, res, next) => {

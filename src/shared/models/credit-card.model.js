@@ -1,5 +1,6 @@
-import { types } from 'mobx-state-tree'
+import { types, flow } from 'mobx-state-tree'
 import { getCreditCardType } from '../../browser/cardTypeHelper'
+import { fetchInitialData } from '../api'
 
 export const GeonameModel = types.model({
     continent: types.optional(types.string, ''),
@@ -114,12 +115,20 @@ export const RootStore = types.model({
     geonames: types.maybe( types.array(GeonameModel), []),
     creditCard: types.maybe(CreditCardModel, {})
 })
+    .views(self => ({
+        get geonamesArray() {
+            return self.geonames.toJSON()
+        }
+    }))
     .actions(self => ({
+        fetchGeonames: flow(function*() {
+            try {
+                const res = yield fetchInitialData()
+                self.geonames = res.geonames
+            } catch (e) { console.log(e) }
+        }),
         setGeonames(_geonames) {
             self.geonames = _geonames
-        },
-        getGeonames() {
-            return self.geonames
         },
         getCreditCard() {
             return self.creditCard;

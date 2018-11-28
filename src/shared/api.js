@@ -1,7 +1,7 @@
 // import fetch from 'isomorphic-fetch'
 
 export const fetchInitialData = () => {
-    return new Promise(resolve => setTimeout(() => resolve(dataList), 1000));
+    return new Promise(resolve => setTimeout(() => resolve(dataList), 2000));
 }
 
 const dataList = {
