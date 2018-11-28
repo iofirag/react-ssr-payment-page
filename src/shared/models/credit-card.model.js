@@ -45,8 +45,8 @@ export const CreditCardModel = types.model({
         isValidCountryCode() { return self.countryCode.length > 0 },
         /* Credit Card Details */
         setCreditCardDetails(ccd) { 
-            let cleanNum = ccd.split('-').join(''); // remove hyphens
-            if (cleanNum.length <= 16 && Number(cleanNum)) {
+            let cleanNum = ccd.replace(/\D/g, ''); // remove hyphens
+            if (cleanNum.length <= 16) {
                 if (cleanNum.length > 0) {
                     cleanNum = cleanNum.match(new RegExp('.{1,4}', 'g')).join('-');
                 }
@@ -95,7 +95,10 @@ export const CreditCardModel = types.model({
             else return false;
         },
         /* CVV */
-        setCvv(c) { if (c.length <= 3) self.cvv = c },
+        setCvv(c) { 
+            const cleanCvv = c.replace(/\D/g, ''); 
+            if (cleanCvv.length <= 3) self.cvv = c 
+        },
         isValidCvv() { return self.cvv.length === 3 },
         /* All */
         formValidation() {

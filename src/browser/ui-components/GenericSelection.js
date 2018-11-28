@@ -1,22 +1,20 @@
 import React, { Component } from 'react';
-import Select from '@material-ui/core/Select';
+import NativeSelect from '@material-ui/core/NativeSelect';
 import { observer, inject } from "mobx-react";
 import MenuItem from '@material-ui/core/MenuItem';
 
 export const GenericSelection = React.memo(observer(props => {
     return (
-        <Select
+        <NativeSelect
             value={props.value}
             onChange={props.onChangeHandler}
             inputProps={{ name: props.name }}>
-            <MenuItem value="">
-                <em>None</em>
-            </MenuItem>
+            <option value="" />
             {
                 props.list.map(obj => (
-                    <MenuItem key={obj[props.listIdField]} value={obj[props.listValField]}>{obj[props.listLabelField]}</MenuItem>
+                    <option key={obj[props.listIdField]} value={obj[props.listValField]}>{obj[props.listLabelField]}</option>
                 ))
             }
-        </Select>
+        </NativeSelect>
     )
 }))
