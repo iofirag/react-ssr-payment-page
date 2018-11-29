@@ -20,34 +20,19 @@ export default class LeafletMap extends Component {
         Popup = rl.Popup;
 
         // Reset default icon
-        // const iconRetinaUrl = require('leaflet/dist/images/marker-icon-2x.png');
-        // const iconUrl = require('leaflet/dist/images/marker-icon.png')
-        // const iconShadow = require('leaflet/dist/images/marker-shadow.png');
-        let DefaultIcon = L.icon({
+        delete L.Icon.Default.prototype._getIconUrl;
+
+        L.Icon.Default.mergeOptions({
             iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
             iconUrl: require('leaflet/dist/images/marker-icon.png'),
-            shadowUrl: require('leaflet/dist/images/marker-shadow.png')
+            shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
         });
-        // L.Marker.prototype.options.icon = DefaultIcon;
-        // debugger;
-        // Object.assign(L.Marker.prototype.options.icon.__proto__.options, {
-        //     iconRetinaUrl,
-        //     iconUrl,
-        //     iconShadow
-        // })
-        L.Marker.prototype.options.icon = DefaultIcon;
-        // L.Marker.prototype.options.icon.__proto__.options.iconRetinaUrl = iconRetinaUrl;
-        // L.Marker.prototype.options.icon.__proto__.options.iconUrl = iconUrl;
-        // L.Marker.prototype.options.icon.__proto__.options.shadowUrl = iconShadow;
-
-
         this.forceUpdate()
     }
     render () {
         if (!Map) return null;
 
         const position = [this.state.lat, this.state.lng];
-        // __isBrowser__ ? console.log(2): ''
 
         return (
                 <Map

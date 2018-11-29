@@ -1,8 +1,5 @@
 .payment .payment-title {
   color: blue; }
-.leaflet-container {
-  height: 400px;
-  width: 100%; }
 .payment .payment-title {
   color: blue; }
 
@@ -42,3 +39,6 @@
     width: 100px; }
   .payment .payment-form button.submit {
     margin: 8px; }
+.leaflet-container {
+  height: 400px;
+  width: 100%; }

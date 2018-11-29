@@ -39,6 +39,9 @@
     width: 100px; }
   .payment .payment-form button.submit {
     margin: 8px; }
+.leaflet-container {
+  height: 400px;
+  width: 100%; }
 /* required styles */
 .leaflet-pane,
 .leaflet-tile,
@@ -640,6 +643,3 @@
   left: 0;
   margin-left: -12px;
   border-right-color: #fff; }
-.leaflet-container {
-  height: 400px;
-  width: 100%; }
