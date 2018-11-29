@@ -16,18 +16,13 @@ import { GenericSelection } from './ui-components/GenericSelection'
 const Payment = inject("store")
     (observer(class Payment extends Component {
         
-        constructor(props) {
-        super(props)
-
-        this.state = {
-            creditCard: {...this.props.store.getCreditCard()},
-            navigate: false,
-            submitted: false
-        }
-        this.props.store.fetchGeonames();
+    state = {
+        creditCard: {...this.props.store.getCreditCard()},
+        navigate: false,
+        submitted: false
     }
 
-    onSubmit(e) {
+    onSubmit = (e) => {
         e.preventDefault();
         // check all fields
         const v = this.props.store.getCreditCard().formValidation();
@@ -45,7 +40,7 @@ const Payment = inject("store")
     }
 
     /* onChanged Handlers */
-    onChangeHandler(e) {
+    onChangeHandler = (e) => {
         switch (e.target.name) {
             case 'billing_address':
                 this.props.store.creditCard.setBillingAddress(e.target.value);      
@@ -72,7 +67,7 @@ const Payment = inject("store")
         this.setState(this.state)
     }
 
-    imageClassName() {
+    imageClassName = () => {
         switch (this.props.store.getCreditCard().getCreditCardImg) {
             case 'mastercard':
                 return 'mastercard-img'       
@@ -85,13 +80,13 @@ const Payment = inject("store")
                 return 'unknown-img'
         }
     }
-    isErrorClass(cond) {
+    isErrorClass = (cond) => {
         !!cond && 'error'
     }
-    componentDidMount = ()=> {
-        
+    componentDidMount() {
+        this.props.store.fetchGeonames();
     }
-    generateMonthList() {
+    generateMonthList = () => {
         const list = [];
         for (let i = 1; i <= 12; i++) {
             // Create month name
@@ -106,7 +101,7 @@ const Payment = inject("store")
         }
         return list;
     }
-    generateYearList() {
+    generateYearList = () => {
         const list = []
         for (let i = 0; i < 9; i++) {
             const currYear = new Date().getFullYear()
