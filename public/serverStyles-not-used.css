@@ -1,5 +1,10 @@
 .payment .payment-title {
   color: blue; }
+.leaflet-container {
+  height: 400px;
+  width: 100%; }
+.payment .payment-title {
+  color: blue; }
 
 .payment .payment-form {
   display: flex;
@@ -21,11 +26,11 @@
     width: 48px;
     height: 34px; }
     .payment .payment-form .creditcard-img.amex-img {
-      background: transparent url(../../creditcards-sprite.png) 0px -8px no-repeat; }
+      background: transparent url(/6ce59df8969054e871d0cda470dda5ad.png) 0px -8px no-repeat; }
     .payment .payment-form .creditcard-img.mastercard-img {
-      background: transparent url(../../creditcards-sprite.png) -48px -8px no-repeat; }
+      background: transparent url(/6ce59df8969054e871d0cda470dda5ad.png) -48px -8px no-repeat; }
     .payment .payment-form .creditcard-img.visa-img {
-      background: transparent url(../../creditcards-sprite.png) -96px -11px no-repeat; }
+      background: transparent url(/6ce59df8969054e871d0cda470dda5ad.png) -96px -11px no-repeat; }
   .payment .payment-form .year-field {
     margin: 8px;
     width: 100px; }

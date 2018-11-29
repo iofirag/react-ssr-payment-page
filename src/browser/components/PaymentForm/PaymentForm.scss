@@ -1,0 +1,59 @@
+$margin-spacing: 8px;
+.payment {
+    .payment-title {
+        color: blue;
+    }
+    .payment-form {
+        display: flex;
+        flex-wrap: wrap;
+        min-width: 120px;
+        max-width: 435px;
+
+        .billing-address-field {
+            margin: $margin-spacing;
+            min-width: 250px;
+        }
+        .country-field {
+            margin: $margin-spacing;
+            width: 150px;
+        }
+        .creditcard-details-field {
+            margin: $margin-spacing;
+            width: 250px;
+        }
+        .creditcard-img {
+            margin: $margin-spacing;
+            margin-top: 21px;
+            width: 48px;
+            height: 34px;
+            
+            &.amex-img {
+                background: transparent url(./creditcards-sprite.png) 0px -8px no-repeat;
+            }
+            &.mastercard-img {
+                background: transparent url(./creditcards-sprite.png) -48px -8px no-repeat;
+            }
+            &.visa-img {
+                background: transparent url(./creditcards-sprite.png) -96px -11px no-repeat;
+            }
+            &.unknown-img {
+        
+            }
+        }
+        .year-field {
+            margin: $margin-spacing;
+            width: 100px
+        }
+        .month-field {
+            margin: $margin-spacing;
+            width: 100px
+        }
+        .cvv-field {
+            margin: $margin-spacing;
+            width: 100px
+        }
+        button.submit {
+            margin: $margin-spacing;
+        }
+    }
+}

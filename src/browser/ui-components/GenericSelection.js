@@ -1,7 +1,6 @@
-import React, { Component } from 'react';
+import React from 'react';
 import NativeSelect from '@material-ui/core/NativeSelect';
-import { observer, inject } from "mobx-react";
-import MenuItem from '@material-ui/core/MenuItem';
+import { observer} from "mobx-react";
 
 export const GenericSelection = React.memo(observer(props => {
     return (

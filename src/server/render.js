@@ -20,8 +20,9 @@ export default (pathname, store, context) => {
             <head>
                 <title>SSR with RR</title>
                 <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no"/>
+                
                 <link rel="stylesheet" href="/styles.css">
-                <script src="/bundle.js" defer></script>
+                
                 <script>
                     // serialize empty store
                     window.INITIAL_STATE = ${serialize(store)}
@@ -29,6 +30,8 @@ export default (pathname, store, context) => {
             </head>
             <body>
                 <div id="app">${markup}</div>
+                <script src="/bundle.js" defer></script>
             </body>
         </html>`;
 }
+//<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.4/leaflet.css">

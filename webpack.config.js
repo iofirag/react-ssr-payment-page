@@ -7,21 +7,63 @@ var FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
 
 const common = {
   rules: [
-    { test: /\.(js)$/, use: 'babel-loader' },
+    { 
+      test: /\.(js|jsx)$/,
+      // exclude: /node_modules/,
+      use: 'babel-loader'
+    },
+    // // Image Loader
+    // {
+    //   test: /\.(jpg|png|svg|gif)$/,
+    //   use: [
+    //     {
+    //       loader: 'file-loader',
+    //       options: {
+    //         publicPath: '/',
+    //         outputPath: 'img/',
+    //         name: '[name].[ext]',
+    //       }
+    //     }
+    //   ]
+    // },
+    // Font Loader
+    // {
+    //   test: /\.(eot|ttf|woff)$/,
+    //   use: [
+    //     {
+    //       loader: 'file-loader',
+    //       options: {
+    //         publicPath: '/',
+    //         outputPath: 'fonts/',
+    //         name: '[name].[ext]'
+    //       }
+    //     }
+    //   ]
+    // },
     {
       test: /\.(scss|css)$/,
       use: ExtractTextPlugin.extract({
         fallback: 'style-loader',
+        // use: [
+        //   'css-loader',
+        //   {
+        //     loader: 'postcss-loader',
+        //     options: {
+        //       plugins: (loader) => [require('autoprefixer')()]
+        //     }
+        //   },
+        //   'sass-loader'
+        // ]
         use: [
           {
             loader: 'css-loader',
-            options: {
-              // If you are having trouble with urls not resolving add this setting.
-              // See https://github.com/webpack-contrib/css-loader#url
-              url: false,
-              minimize: true,
-              sourceMap: true
-            }
+            // options: {
+            //   // If you are having trouble with urls not resolving add this setting.
+            //   // See https://github.com/webpack-contrib/css-loader#url
+            //   url: false,
+            //   minimize: true,
+            //   sourceMap: true
+            // }
           },
           {
             loader: 'sass-loader',
@@ -48,13 +90,40 @@ var browserConfig = {
   module: {
     rules: common.rules.concat([
       // Can add more here
+      // Image Loader
+      {
+        test: /\.(jpg|png|svg|gif)$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              publicPath: '/img', // Insert this value in the prefix of url('...')  of generated file
+              outputPath: 'img/', // real folder structure path
+              name: '[hash].[ext]', 
+            }
+          }
+        ]
+      },
+      {
+      test: /\.(eot|ttf|woff)$/,
+      use: [
+        {
+          loader: 'file-loader',
+          options: {
+            publicPath: '/',
+            outputPath: 'fonts/',
+            name: '[hash].[ext]'
+          }
+        }
+      ]
+    },
     ])
   },
   plugins: common.plugins.concat([
     new ExtractTextPlugin('styles.css'),
-    // new webpack.DefinePlugin({
-    //   __isBrowser__: "true"
-    // }),
+    new webpack.DefinePlugin({
+      __isBrowser__: "true"
+    }),
   ])
 }
 
@@ -70,13 +139,39 @@ var serverConfig = {
   module: {
     rules: common.rules.concat([
       // Can add more here
+      {
+        test: /\.(jpg|png|svg|gif)$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              publicPath: '/',
+              outputPath: 'public/img/',
+              name: '[hash].[ext]',
+            }
+          }
+        ]
+      },
+      {
+        test: /\.(eot|ttf|woff)$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              publicPath: '/',
+              outputPath: 'public/fonts/',
+              name: '[hash].[ext]'
+            }
+          }
+        ]
+      },
     ])
   },
   plugins: common.plugins.concat([
     new ExtractTextPlugin('./public/serverStyles-not-used.css'),
-    // new webpack.DefinePlugin({
-    //   __isBrowser__: "false"
-    // }),
+    new webpack.DefinePlugin({
+      __isBrowser__: "false"
+    }),
   ])
 }
 
