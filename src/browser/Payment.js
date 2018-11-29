@@ -88,7 +88,7 @@ const Payment = inject("store")
     isErrorClass(cond) {
         !!cond && 'error'
     }
-    componentDidMount() {
+    componentDidMount = ()=> {
         
     }
     generateMonthList() {

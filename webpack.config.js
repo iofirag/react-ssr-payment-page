@@ -1,3 +1,4 @@
+require("babel-polyfill");
 var path = require('path')
 var webpack = require('webpack')
 var nodeExternals = require('webpack-node-externals')
@@ -38,7 +39,7 @@ const common = {
 }
 
 var browserConfig = {
-  entry: './src/browser/index.js',
+  entry: ["babel-polyfill", './src/browser/index.js'],
   output: {
     path: path.join(__dirname, 'public'),
     publicPath: '/',
@@ -58,7 +59,7 @@ var browserConfig = {
 }
 
 var serverConfig = {
-  entry: './src/server/index.js',
+  entry: ["babel-polyfill", './src/server/index.js'],
   target: 'node',
   externals: [nodeExternals()],
   output: {
