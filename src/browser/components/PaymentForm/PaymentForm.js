@@ -45,6 +45,7 @@ const PaymentForm = inject("store")
                     break;
                 case 'country':
                     this.props.store.creditCard.setCountryCode(e.target.value);
+                    this.props.onCountryChange(e.target.value)
                     break;
                 case 'credit_card_details':
                     this.props.store.creditCard.setCreditCardDetails(e.target.value);
@@ -109,15 +110,15 @@ const PaymentForm = inject("store")
         }
         render() {
             const { navigate, validation, submitted } = this.state;
-            const creditCard = this.props.store.getCreditCard();
+            const creditCard = this.props.store.getCreditCard();    // remove
             const { geonames } = this.props.store
 
             if (navigate) {
                 return <Redirect to="/thanks" push={true} />
             }
-
+            // TODO remove all  
             return (
-                <form className='payment-form' onSubmit={this.onSubmit.bind(this)} autoComplete="off">
+                <form className='payment-form' onSubmit={this.onSubmit } autoComplete="off">
 
                     <TextField
                         required
@@ -126,7 +127,7 @@ const PaymentForm = inject("store")
                         label="Billing Address"
                         className='billing-address-field'
                         value={creditCard.billingAddress}
-                        onChange={this.onChangeHandler.bind(this)}
+                        onChange={this.onChangeHandler }
                         margin="normal"
                         inputProps={{ name: 'billing_address' }}
                     />
@@ -141,7 +142,7 @@ const PaymentForm = inject("store")
                             listLabelField={'countryName'}
                             name={'country'}
                             value={creditCard.countryCode}
-                            onChangeHandler={this.onChangeHandler.bind(this)} />
+                            onChangeHandler={this.onChangeHandler } />
                         {/* {
                         submitted && !validation.isValidCountryCode ?
                             <FormHelperText>Error</FormHelperText> : ''
@@ -155,7 +156,7 @@ const PaymentForm = inject("store")
                         label="Credit Card Details"
                         className='creditcard-details-field'
                         value={creditCard.creditCardDetails}
-                        onChange={this.onChangeHandler.bind(this)}
+                        onChange={this.onChangeHandler }
                         margin="normal"
                         inputProps={{ name: 'credit_card_details' }}
                     />
@@ -170,7 +171,7 @@ const PaymentForm = inject("store")
                             listLabelField={'name'}
                             name={'month'}
                             value={creditCard.month}
-                            onChangeHandler={this.onChangeHandler.bind(this)} />
+                            onChangeHandler={this.onChangeHandler } />
 
                         {/* {
                         submitted && !validation.isValidMonth ?
@@ -187,7 +188,7 @@ const PaymentForm = inject("store")
                             listLabelField={'number'}
                             name={'year'}
                             value={creditCard.year}
-                            onChangeHandler={this.onChangeHandler.bind(this)} />
+                            onChangeHandler={this.onChangeHandler } />
                         {/* {
                         submitted && !validation.isValidMonth ?
                             <FormHelperText>Error</FormHelperText> : ''
@@ -201,7 +202,7 @@ const PaymentForm = inject("store")
                         label="CVV"
                         className='cvv-field'
                         value={creditCard.cvv}
-                        onChange={this.onChangeHandler.bind(this)}
+                        onChange={this.onChangeHandler }
                         margin="normal"
                         inputProps={{
                             name: 'cvv',

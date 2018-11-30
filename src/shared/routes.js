@@ -1,5 +1,5 @@
-import Payment from '../browser/Payment'
-import Thanks from '../browser/Thanks'
+import Payment from '../browser/components/Payment/Payment'
+import Thanks from '../browser/components/Thanks/Thanks'
 import {fetchInitialData} from './api'
 
 export const routes = [

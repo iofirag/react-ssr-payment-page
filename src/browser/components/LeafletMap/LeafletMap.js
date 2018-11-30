@@ -5,14 +5,15 @@ let Map, TileLayer, Marker, Popup;
 
 
 export default class LeafletMap extends Component {
+    
     state = {
-        lat: 51.505,
-        lng: -0.09,
+        lat: this.props.poi.lat,
+        lng: this.props.poi.lng,
         zoom: 13
     }
     componentDidMount () {
+        console.log(this.props.poi.lat, this.props.poi.lng)
         require('leaflet/dist/leaflet.css');
-
         const rl = require('react-leaflet');
         Map = rl.Map;
         TileLayer = rl.TileLayer;
@@ -32,7 +33,8 @@ export default class LeafletMap extends Component {
     render () {
         if (!Map) return null;
 
-        const position = [this.state.lat, this.state.lng];
+        const position = [this.props.poi.lat, this.props.poi.lng];
+        console.log(this.props.cc)
 
         return (
                 <Map
