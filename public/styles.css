@@ -40,7 +40,7 @@
   .payment .payment-form button.submit {
     margin: 8px; }
 .leaflet-container {
-  height: 400px;
+  height: 350px;
   width: 100%; }
 /* required styles */
 .leaflet-pane,

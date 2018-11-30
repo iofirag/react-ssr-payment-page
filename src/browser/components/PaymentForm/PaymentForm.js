@@ -45,7 +45,6 @@ const PaymentForm = inject("store")
                     break;
                 case 'country':
                     this.props.store.creditCard.setCountryCode(e.target.value);
-                    this.props.onCountryChange(e.target.value)
                     break;
                 case 'credit_card_details':
                     this.props.store.creditCard.setCreditCardDetails(e.target.value);

@@ -13,18 +13,26 @@ const Payment = inject("store")
     state = {
         countryLocation: {lat: 32, lng: 35},
     }
-    onCountryChange = (_countryCode) => {
+    getCountryLocationFromCountryCode = (_countryCode) => {
         const {geonames} = this.props.store;
         const countryItem = geonames.find((item) => item.countryCode === _countryCode);
-        this.setState({countryLocation: { lat: countryItem.north, lng: countryItem.east}})
+        let poi = {}
+        if (countryItem) {
+            poi = { lat: countryItem.north, lng: countryItem.east }
+        }
+        return poi;
+        // this.setState({countryLocation: { lat: countryItem.north, lng: countryItem.east}})
+        // this.setState({countryLocation: { lat: countryItem.north, lng: countryItem.east}})
     }
     render() {
-        // const { creditCard } = this.props.store
+        const { creditCard } = this.props.store;
+        const poi = this.getCountryLocationFromCountryCode(creditCard.countryCode)
+
         return (
             <div className="payment">
                 <PaymentHeader />
-                <PaymentForm onCountryChange={this.onCountryChange} />
-                <LeafletMap poi={this.state.countryLocation} />
+                <PaymentForm />
+                <LeafletMap poi={poi} />
             </div>
         )
     }

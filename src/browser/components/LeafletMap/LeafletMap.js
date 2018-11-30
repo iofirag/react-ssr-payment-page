@@ -7,12 +7,11 @@ let Map, TileLayer, Marker, Popup;
 export default class LeafletMap extends Component {
     
     state = {
-        lat: this.props.poi.lat,
-        lng: this.props.poi.lng,
-        zoom: 13
+        minZoom: 1,
+        maxZoom: 20,
+        zoom: 1,
     }
     componentDidMount () {
-        console.log(this.props.poi.lat, this.props.poi.lng)
         require('leaflet/dist/leaflet.css');
         const rl = require('react-leaflet');
         Map = rl.Map;
@@ -33,26 +32,39 @@ export default class LeafletMap extends Component {
     render () {
         if (!Map) return null;
 
-        const position = [this.props.poi.lat, this.props.poi.lng];
-        console.log(this.props.cc)
+        let position = []
+        let zoom = 1;
+        const {poi} = this.props;
+        if (poi && poi.lat && poi.lng) {
+            position = [poi.lat, poi.lng];
+        } else {
+            const DefaultLocation = [32, 35]
+            position = DefaultLocation;
+            zoom = 1
+        }
 
         return (
-                <Map
-                    zoom={10}
-                    maxZoom={18}
-                    minZoom={9}
-                    center={position}
-                >
-                    <TileLayer
-                        attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                        url='http://{s}.tile.osm.org/{z}/{x}/{y}.png'
-                    />
-                    <Marker position={position}>
-                        <Popup>
-                            A pretty CSS3 popup. <br /> Easily customizable.
-                        </Popup>
-                    </Marker>
-                </Map>
+            <Map
+                zoom={zoom}
+                maxZoom={this.state.maxZoom}
+                minZoom={this.state.minZoom}
+                center={position}
+            >
+                <TileLayer
+                    attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                    url='http://{s}.tile.osm.org/{z}/{x}/{y}.png'
+                />
+                {
+                    poi.lat && poi.lng? (
+                        <Marker position={position}>
+                            <Popup>
+                                A pretty CSS3 popup. <br /> Easily customizable.
+                            </Popup>
+                        </Marker>
+                    ) : ''
+
+                }
+            </Map>
         )
     }
 }
