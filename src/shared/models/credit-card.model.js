@@ -26,6 +26,7 @@ export const GeonameModel = types.model({
 export const CreditCardModel = types.model({
     billingAddress: types.optional(types.string, ''),
     countryCode: types.optional(types.string, ''),
+    // selectedCountry: types.optional(GeonameModel, {}),
     creditCardDetails: types.optional(types.string, ''),
     month: types.optional(types.string, ''),
     year: types.optional(types.string, ''),
@@ -42,6 +43,9 @@ export const CreditCardModel = types.model({
         isValidBillingAddress() { return self.billingAddress.length > 0},
         /* Country Code */
         setCountryCode(cc) { self.countryCode = cc },
+        // setCountry(cc) { 
+        //     self.countryCode = cc 
+        // },
         isValidCountryCode() { return self.countryCode.length > 0 },
         /* Credit Card Details */
         setCreditCardDetails(ccd) { 
@@ -119,6 +123,21 @@ export const RootStore = types.model({
     geonames: types.maybe( types.array(GeonameModel), []),
     creditCard: types.maybe(CreditCardModel, {})
 })
+    .views(self => ({
+        get selectedCountry () {
+            return self.geonames.find((item) => self.creditCard.countryCode === item.countryCode);
+        }
+        // getCountryLocationFromCountryCode = (_countryCode) => {
+        //     const { geonames } = this.props.store;
+        //     console.log(_countryCode)
+        //     const countryItem = geonames.find((item) => item.countryCode === _countryCode);
+        //     let poi = {}
+        //     if (countryItem) {
+        //         poi = { lat: countryItem.north, lng: countryItem.east }
+        //     }
+        //     return poi;
+        // }
+    }))
     .actions(self => ({
         fetchGeonames: flow(function*() {
             try {
