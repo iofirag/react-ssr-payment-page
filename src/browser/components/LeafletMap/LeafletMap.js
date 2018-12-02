@@ -12,6 +12,7 @@ export default class LeafletMap extends Component {
             minZoom: 1,
             maxZoom: 20,
             zoom: 1,
+            bounds: [[-90, -180], [90, 180]],
             center: [32, 35]
         }
 
@@ -40,15 +41,16 @@ export default class LeafletMap extends Component {
         });
         this.forceUpdate()
     }
-    shouldComponentUpdate(nextProps) {
-        const { south, west, north, east } = nextProps.selectedCountry;
-        const southWest = L.latLng(south, west),
-            northEast = L.latLng(north, east),
-            bounds = L.latLngBounds(southWest, northEast);
-
-        this.mapRef.leafletElement.flyToBounds(bounds, 20)
-        return false;
+    static getDerivedStateFromProps(nextProps) {
+        if (nextProps && nextProps.selectedCountry) {
+            const { south, west, north, east } = nextProps.selectedCountry;
+            const southWest = L.latLng(south, west);
+            const northEast = L.latLng(north, east);
+            return { bounds: L.latLngBounds(southWest, northEast) }
+        }
+        return null;
     }
+
     render () {
         if (!Map) return null;
 
@@ -56,9 +58,12 @@ export default class LeafletMap extends Component {
             <Map
                 ref={this.setMapRef}
                 zoom={this.state.zoom}
+                bounds={this.state.bounds}
                 maxZoom={this.state.maxZoom}
                 minZoom={this.state.minZoom}
                 center={this.state.center}
+                useFlyTo={true}
+                // animate={true}
             >
                 <TileLayer
                     attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
