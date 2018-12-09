@@ -63,7 +63,6 @@ export default class LeafletMap extends Component {
                 minZoom={this.state.minZoom}
                 center={this.state.center}
                 useFlyTo={true}
-                // animate={true}
             >
                 <TileLayer
                     attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
